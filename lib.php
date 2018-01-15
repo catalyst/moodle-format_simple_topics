@@ -29,13 +29,12 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot. '/course/format/topics/lib.php');
 
 class format_simple_topics extends format_topics {
-    protected $modinfo;
-
     /**
-     * Return course_modinfo.
+     * Locally cached mod info object.
      *
-     * @return \course_modinfo|null
+     * @var course_modinfo
      */
+    protected $modinfo;
 
     /**
      * Return course_modinfo.
@@ -51,7 +50,49 @@ class format_simple_topics extends format_topics {
         return $this->modinfo;
     }
 
+    /**
+     * Definitions of the additional options that this course format uses for course
+     *
+     * @param bool $foreditform
+     * @return array of options
+     */
+    public function course_format_options($foreditform = false) {
+        static $courseformatoptions = false;
 
+        if ($courseformatoptions === false) {
+            $courseconfig = get_config('moodlecourse');
+            $courseformatoptions = array(
+                'hiddensections' => array(
+                    'default' => $courseconfig->hiddensections,
+                    'type' => PARAM_INT,
+                ),
+                'coursedisplay' => array(
+                    'default' => COURSE_DISPLAY_MULTIPAGE,
+                    'type' => PARAM_INT,
+                ),
+            );
+        }
+
+        if ($foreditform && !isset($courseformatoptions['coursedisplay']['label'])) {
+            $courseformatoptionsedit = array(
+                'hiddensections' => array(
+                    'label' => new lang_string('hiddensections'),
+                    'help' => 'hiddensections',
+                    'help_component' => 'moodle',
+                    'element_type' => 'select',
+                    'element_attributes' => array(
+                        array(
+                            0 => new lang_string('hiddensectionscollapsed'),
+                            1 => new lang_string('hiddensectionsinvisible')
+                        )
+                    ),
+                ),
+            );
+            $courseformatoptions = array_merge_recursive($courseformatoptions, $courseformatoptionsedit);
+        }
+
+        return $courseformatoptions;
+    }
 
     /**
      * The URL to use for the specified course (with section)
@@ -64,40 +105,30 @@ class format_simple_topics extends format_topics {
      * @return null|moodle_url
      */
     public function get_view_url($section, $options = array()) {
-        global $CFG;
         $course = $this->get_course();
         $url = new moodle_url('/course/view.php', array('id' => $course->id));
 
         $sr = null;
+
         if (array_key_exists('sr', $options)) {
             $sr = $options['sr'];
         }
+
         if (is_object($section)) {
             $sectionno = $section->section;
         } else {
             $sectionno = $section;
-            $section = $this->get_section($sectionno);
         }
-        if ($sectionno !== null) {
-            if ($sr !== null) {
-                if ($sr) {
-                    $usercoursedisplay = COURSE_DISPLAY_MULTIPAGE;
-                    $sectionno = $sr;
-                } else {
-                    $usercoursedisplay = COURSE_DISPLAY_SINGLEPAGE;
-                }
-            } else {
-                $usercoursedisplay = $course->coursedisplay;
+
+        if (!is_null($sectionno)) {
+            if (!empty($sr)) {
+                $sectionno = $sr;
             }
-            if ($sectionno != 0 && $usercoursedisplay == COURSE_DISPLAY_MULTIPAGE) {
-                $url = $this->get_first_activity_url($sectionno);
-            } else {
-                if (empty($CFG->linkcoursesections) && !empty($options['navigation'])) {
-                    return null;
-                }
-                $url->set_anchor('section-'.$sectionno);
-            }
+
+            $url = $this->get_first_activity_url($sectionno);
+
         }
+
         return $url;
     }
 
@@ -114,7 +145,7 @@ class format_simple_topics extends format_topics {
         parent::extend_course_navigation($navigation, $node);
 
         // We want to remove the general section from the navigation.
-        $modinfo = get_fast_modinfo($this->get_course());
+        $modinfo = $this->get_modinfo();
         $section = $modinfo->get_section_info(0);
         $generalsection = $node->get($section->id, navigation_node::TYPE_SECTION);
         if ($generalsection) {
@@ -124,6 +155,8 @@ class format_simple_topics extends format_topics {
     }
 
     /**
+     * Return first activity URL for the section.
+     *
      * @param $sectionno
      *
      * @return \moodle_url|string
