@@ -28,3 +28,5 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Simple Topics format';
+$string['hidefromothers'] = 'Hide topic';
+$string['showfromothers'] = 'Show topic';
