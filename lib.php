@@ -81,7 +81,11 @@ class format_simple_topics extends format_topics {
                 $sectionno = $sr;
             }
 
-            $url = $this->get_first_activity_url($sectionno);
+            $firstactiviturl = $this->get_first_activity_url($sectionno);
+
+            if (!empty($firstactiviturl) && $firstactiviturl instanceof moodle_url) {
+                $url = $firstactiviturl;
+            }
 
         }
 
