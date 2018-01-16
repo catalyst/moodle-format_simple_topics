@@ -195,7 +195,7 @@ class section_progress {
      */
     protected function is_activity_completed($activity) {
         return ($this->get_activity_completion($activity)->completionstate == COMPLETION_COMPLETE ||
-            $this->get_activity_completion($activity) == COMPLETION_COMPLETE_PASS);
+            $this->get_activity_completion($activity)->completionstate == COMPLETION_COMPLETE_PASS);
     }
 
     /**
