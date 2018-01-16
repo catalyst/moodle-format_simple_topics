@@ -51,23 +51,6 @@ class format_simple_topics extends format_topics {
     }
 
     /**
-     * Returns the default section name for the course format.
-     *
-     * @param stdClass $section Section object from database or just field course_sections section
-     * @return string The default value for the section name.
-     */
-    public function get_default_section_name($section) {
-        if ($section->section == 0) {
-            // Return the general section.
-            return '';
-        } else {
-            // Use format_base::get_default_section_name implementation which
-            // will display the section name in "Topic n" format.
-            return parent::get_default_section_name($section);
-        }
-    }
-
-    /**
      * The URL to use for the specified course (with section)
      *
      * @param int|stdClass $section Section object from database or just field course_sections.section
