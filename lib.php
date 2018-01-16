@@ -161,13 +161,16 @@ class format_simple_topics extends format_topics {
     public function extend_course_navigation($navigation, navigation_node $node) {
         parent::extend_course_navigation($navigation, $node);
 
-        // We want to remove the general section from the navigation.
-        $modinfo = $this->get_modinfo();
-        $section = $modinfo->get_section_info(0);
-        $generalsection = $node->get($section->id, navigation_node::TYPE_SECTION);
-        if ($generalsection) {
-            // We found the node - now remove it.
-            $generalsection->remove();
+        foreach ($this->get_sections() as $section) {
+            $progress = new \format_simple_topics\section_progress($section);
+
+            // Remove general section and all empty sections form the navigation.
+            if ($section->section == 0 || empty($progress->get_activities())) {
+                $sectionnode = $node->get($section->id, navigation_node::TYPE_SECTION);
+                if ($sectionnode) {
+                    $sectionnode->remove();
+                }
+            }
         }
     }
 

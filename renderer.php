@@ -39,6 +39,12 @@ class format_simple_topics_renderer extends format_topics_renderer {
      * @return string HTML to output.
      */
     protected function section_summary($section, $course, $mods) {
+        $progress = new \format_simple_topics\section_progress($section);
+
+        if (empty($progress->get_activities())) {
+            return '';
+        }
+
         $classattr = 'section main section-summary clearfix';
         $linkclasses = '';
 
@@ -48,6 +54,12 @@ class format_simple_topics_renderer extends format_topics_renderer {
             $linkclasses .= ' dimmed_text';
         } else if (course_get_format($course)->is_section_current($section)) {
             $classattr .= ' current';
+        }
+
+        if ($progress->is_completed()) {
+            $classattr .= ' completed';
+        } else {
+            $classattr .= ' incompleted';
         }
 
         $titletext = get_section_name($course, $section);
