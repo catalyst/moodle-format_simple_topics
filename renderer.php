@@ -51,7 +51,7 @@ class format_simple_topics_renderer extends format_topics_renderer {
         }
 
         $titletext = get_section_name($course, $section);
-        $title = $this->output->heading($titletext, 3, 'section-title');
+        $title = $this->output->heading(html_writer::span($titletext), 3, 'section-title');
 
         $number = html_writer::tag('div', $section->section, array('class' => 'section-number'));
         $tick = html_writer::tag('div', '', array('class' => 'section-tick'));
