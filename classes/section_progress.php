@@ -117,7 +117,9 @@ class section_progress {
 
             if ($sections && !empty($sections[$this->get_sectionno()])) {
                 foreach ($sections[$this->get_sectionno()] as $cmid) {
-                    $this->activities[] = $this->get_modinfo()->cms[$cmid];
+                    if ($this->get_modinfo()->cms[$cmid]->uservisible) {
+                        $this->activities[] = $this->get_modinfo()->cms[$cmid];
+                    }
                 }
             }
         }
@@ -150,6 +152,28 @@ class section_progress {
             return null;
 
         }
+    }
+
+    /**
+     * Return the first activity in the section.
+     *
+     * @return mixed|null
+     */
+    public function get_last_activity() {
+        if (!empty($this->get_activities())) {
+            return $this->get_activities()[$this->count_activities() - 1];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Return a number of activities in the section.
+     *
+     * @return int
+     */
+    public function count_activities() {
+        return count($this->get_activities());
     }
 
     /**

@@ -87,4 +87,17 @@ class format_simple_topics_renderer extends format_topics_renderer {
         return $o;
     }
 
+    /**
+     * Render next-prev links.
+     *
+     * @param \navigation_links $links
+     *
+     * @return string
+     */
+    protected function render_navigation_links(navigation_links $links) {
+        $linksrenderer = $this->page->get_renderer('format_simple_topics', 'navigation_links_activity');
+
+        return $linksrenderer->render_navigation_links();
+    }
+
 }

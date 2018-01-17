@@ -131,13 +131,46 @@ class format_simple_topics extends format_topics {
         if ($sections && !empty($sections[$sectionno])) {
             foreach ($sections[$sectionno] as $cmid) {
                 $cm = $this->get_modinfo()->cms[$cmid];
-                if ($cm->available) {
+                if ($cm->uservisible) {
                     return $cm->url;
                 }
             }
         }
 
         return '';
+    }
+
+    /**
+     * Course-specific information to be output immediately below content on any course page
+     *
+     * @return null|renderable null for no output or object with data for plugin renderer
+     */
+    public function course_content_footer() {
+        global $PAGE;
+
+        $links = null;
+
+        // If we are on the course module view page.
+        if ($PAGE->context && $PAGE->context->contextlevel == CONTEXT_MODULE && $PAGE->cm) {
+            $links = new navigation_links();
+        }
+
+        return $links;
+    }
+}
+
+/**
+ * Class navigation_links is renderable for displaying next-prev links. It's required by format API.
+ */
+class navigation_links implements renderable {
+    protected $currentsection = null;
+
+    public function __construct($section = null) {
+        $this->currentsection = $section;
+    }
+
+    public function get_current_section() {
+        return $this->currentsection;
     }
 }
 
