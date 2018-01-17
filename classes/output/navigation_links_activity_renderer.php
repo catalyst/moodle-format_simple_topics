@@ -142,8 +142,9 @@ class navigation_links_activity_renderer extends navigation_links_render_base {
         if ($prevsectionnum > 0) {
             $prevsection = $this->get_sections_info()[$prevsectionnum];
             $progress = new section_progress($prevsection);
+            $lastactivity = $progress->get_last_activity();
 
-            if ($lastactivity = $progress->get_last_activity()) {
+            if ($lastactivity && $lastactivity->url instanceof \moodle_url) {
                 return $lastactivity;
             } else {
                 return $this->get_prev_section_last_cm($prevsectionnum);
@@ -193,8 +194,9 @@ class navigation_links_activity_renderer extends navigation_links_render_base {
         if ($nextsectionnum < count($this->get_sections_info())) {
             $nextection = $this->get_sections_info()[$nextsectionnum];
             $progress = new section_progress($nextection);
+            $firstactivity = $progress->get_first_activity();
 
-            if ($firstactivity = $progress->get_first_activity()) {
+            if ($firstactivity && !empty($firstactivity->url)) {
                 return $firstactivity;
             } else {
                 return $this->get_next_section_first_cm($nextsectionnum);

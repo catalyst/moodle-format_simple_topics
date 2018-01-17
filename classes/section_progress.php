@@ -117,8 +117,9 @@ class section_progress {
 
             if ($sections && !empty($sections[$this->get_sectionno()])) {
                 foreach ($sections[$this->get_sectionno()] as $cmid) {
-                    if ($this->get_modinfo()->cms[$cmid]->uservisible) {
-                        $this->activities[] = $this->get_modinfo()->cms[$cmid];
+                    $cm = $this->get_modinfo()->cms[$cmid];
+                    if ($this->is_activity_valid($cm)) {
+                        $this->activities[] = $cm;
                     }
                 }
             }
@@ -208,6 +209,21 @@ class section_progress {
         }
 
         return $this->status;
+    }
+
+    /**
+     * Check if the provided activity should be in a list of all activities for the section.
+     *
+     * @param \cm_info $activity Activity.
+     *
+     * @return bool
+     */
+    protected function is_activity_valid($activity) {
+        if ($activity->uservisible && $activity->modname != 'label') {
+            return true;
+        }
+
+        return false;
     }
 
     /**

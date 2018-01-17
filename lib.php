@@ -131,7 +131,7 @@ class format_simple_topics extends format_topics {
         if ($sections && !empty($sections[$sectionno])) {
             foreach ($sections[$sectionno] as $cmid) {
                 $cm = $this->get_modinfo()->cms[$cmid];
-                if ($cm->uservisible) {
+                if ($cm->uservisible && $cm->modname != 'label') {
                     return $cm->url;
                 }
             }
