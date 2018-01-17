@@ -143,8 +143,8 @@ class navigation_links_activity_renderer extends navigation_links_render_base {
             $prevsection = $this->get_sections_info()[$prevsectionnum];
             $progress = new section_progress($prevsection);
 
-            if ($progress->get_last_activity()) {
-                return $progress->get_last_activity();
+            if ($lastactivity = $progress->get_last_activity()) {
+                return $lastactivity;
             } else {
                 return $this->get_prev_section_last_cm($prevsectionnum);
             }
@@ -194,8 +194,8 @@ class navigation_links_activity_renderer extends navigation_links_render_base {
             $nextection = $this->get_sections_info()[$nextsectionnum];
             $progress = new section_progress($nextection);
 
-            if ($progress->get_first_activity()) {
-                return $progress->get_first_activity();
+            if ($firstactivity = $progress->get_first_activity()) {
+                return $firstactivity;
             } else {
                 return $this->get_next_section_first_cm($nextsectionnum);
             }
