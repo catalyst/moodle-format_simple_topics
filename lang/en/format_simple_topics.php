@@ -31,3 +31,5 @@ $string['pluginname'] = 'Simple Topics format';
 $string['sectionname'] = 'Topic';
 $string['hidefromothers'] = 'Hide topic';
 $string['showfromothers'] = 'Show topic';
+$string['prevunit'] = 'Previous Unit:';
+$string['nextunit'] = 'Next Unit:';

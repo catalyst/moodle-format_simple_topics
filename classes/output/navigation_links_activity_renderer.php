@@ -67,7 +67,7 @@ class navigation_links_activity_renderer extends navigation_links_render_base {
         $next = $this->make_next_link($nextcm);
 
         $links = $previous . $next;
-        return html_writer::div($links, 'format_unbox-bottom-links');
+        return html_writer::div($links, 'format_simple_topics-bottom-links');
     }
 
     /**

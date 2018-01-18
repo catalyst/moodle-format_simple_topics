@@ -24,7 +24,9 @@
     * text - string
 }}
 
-
 <span class="format_simple_topics-link-next">
-    <a href="{{{url}}}" class="btn btn-secondary btn-primary-if-focused">{{{text}}} <span class="rarrow">►</span></a>
+        <a href="{{{url}}}" class="course-pagination pagination-focused">
+            <span>{{#str}} nextunit, format_simple_topics {{/str}}</span>
+            <span>{{{text}}}</span>
+        </a>
 </span>
