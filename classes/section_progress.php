@@ -119,7 +119,7 @@ class section_progress {
                 foreach ($sections[$this->get_sectionno()] as $cmid) {
                     $cm = $this->get_modinfo()->cms[$cmid];
                     if ($this->is_activity_valid($cm)) {
-                        $this->activities[] = $cm;
+                        $this->activities[$cmid] = $cm;
                     }
                 }
             }
@@ -148,7 +148,8 @@ class section_progress {
      */
     public function get_first_activity() {
         if (!empty($this->get_activities())) {
-            return $this->get_activities()[0];
+            $activities = $this->get_activities();
+            return reset($activities);
         } else {
             return null;
 
@@ -162,7 +163,8 @@ class section_progress {
      */
     public function get_last_activity() {
         if (!empty($this->get_activities())) {
-            return $this->get_activities()[$this->count_activities() - 1];
+            $activities = $this->get_activities();
+            return end($activities);
         } else {
             return null;
         }
@@ -196,9 +198,9 @@ class section_progress {
             $this->status = self::STATUS_INCOMPLETE;
             $trackedactivities = $this->get_course_completion()->get_activities();
 
-            foreach ($this->get_activities() as $activity) {
+            foreach ($this->get_activities() as $cmid => $activity) {
                 if (array_key_exists($activity->id, $trackedactivities)) {
-                    if ($this->is_activity_completed($activity)) {
+                    if ($this->is_activity_completed($cmid)) {
                         $this->status = self::STATUS_COMPLETE;
                     } else {
                         $this->status = self::STATUS_INCOMPLETE;
@@ -229,13 +231,17 @@ class section_progress {
     /**
      * Check if provided section activity is completed.
      *
-     * @param \cm_info $activity Activity.
+     * @param int $cmid Activity.
      *
      * @return bool
      */
-    protected function is_activity_completed($activity) {
-        return ($this->get_activity_completion($activity)->completionstate == COMPLETION_COMPLETE ||
-            $this->get_activity_completion($activity)->completionstate == COMPLETION_COMPLETE_PASS);
+    public function is_activity_completed($cmid) {
+        if (empty($this->get_activities()[$cmid])) {
+            return false;
+        }
+
+        return ($this->get_activity_completion($this->get_activities()[$cmid])->completionstate == COMPLETION_COMPLETE ||
+            $this->get_activity_completion($this->get_activities()[$cmid])->completionstate == COMPLETION_COMPLETE_PASS);
     }
 
     /**
