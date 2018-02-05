@@ -110,14 +110,14 @@ class navigation_links_activity_renderer extends navigation_links_render_base {
      */
     protected function make_previous_link($previouscm) {
         // Link to previous course module in the current section.
-        if ($previouscm) {
+        if ($previouscm and $previouscm->url instanceof \moodle_url) {
             return $this->make_previous_link_html($previouscm->url, $previouscm->name);
         }
 
         // Get the last activity in the prev section.
         $prevactivity = $this->get_prev_section_last_cm($this->coursemodule->sectionnum);
 
-        if ($prevactivity) {
+        if ($prevactivity and $prevactivity->url instanceof \moodle_url) {
             return $this->make_previous_link_html(
                 $prevactivity->url,
                 $prevactivity->name

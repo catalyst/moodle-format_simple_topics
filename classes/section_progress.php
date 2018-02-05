@@ -221,7 +221,7 @@ class section_progress {
      * @return bool
      */
     protected function is_activity_valid($activity) {
-        if ($activity->uservisible && $activity->modname != 'label') {
+        if ($activity->uservisible && $activity->url instanceof \moodle_url) {
             return true;
         }
 

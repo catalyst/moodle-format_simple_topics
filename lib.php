@@ -103,15 +103,37 @@ class format_simple_topics extends format_topics {
      */
     public function extend_course_navigation($navigation, navigation_node $node) {
         parent::extend_course_navigation($navigation, $node);
+        $this->clean_up_navigation($navigation, $node);
+    }
 
+    /**
+     * Clean up navigation node as required.
+     *
+     * @param global_navigation $navigation
+     * @param navigation_node $node The course node within the navigation
+     */
+    protected function clean_up_navigation($navigation, navigation_node $node) {
         foreach ($this->get_sections() as $section) {
             $progress = new \format_simple_topics\section_progress($section);
+            $sectionnode = $node->get($section->id, navigation_node::TYPE_SECTION);
 
-            // Remove general section and all empty sections form the navigation.
-            if ($section->section == 0 || empty($progress->get_activities())) {
-                $sectionnode = $node->get($section->id, navigation_node::TYPE_SECTION);
-                if ($sectionnode) {
+            if ($sectionnode) {
+                $validcmds = $progress->get_activities();
+
+                // Remove general section and all empty sections form the navigation.
+                if ($section->section == 0 || empty($validcmds)) {
                     $sectionnode->remove();
+                }
+
+                // Remove activities of the current section, if they are not part of the section progress.
+                $cmids = $sectionnode->get_children_key_list();
+                foreach ($cmids as $cmid) {
+                    if (!key_exists($cmid, $validcmds)) {
+                        $activitynode = $sectionnode->get($cmid, navigation_node::TYPE_ACTIVITY);
+                        if ($activitynode) {
+                            $activitynode->remove();
+                        }
+                    }
                 }
             }
         }
@@ -131,7 +153,7 @@ class format_simple_topics extends format_topics {
         if ($sections && !empty($sections[$sectionno])) {
             foreach ($sections[$sectionno] as $cmid) {
                 $cm = $this->get_modinfo()->cms[$cmid];
-                if ($cm->uservisible && $cm->modname != 'label') {
+                if ($cm->uservisible && $cm->url instanceof moodle_url) {
                     return $cm->url;
                 }
             }
