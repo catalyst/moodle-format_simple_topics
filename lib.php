@@ -170,21 +170,22 @@ class format_simple_topics extends format_topics {
     public function course_content_footer() {
         global $PAGE;
 
-        $links = null;
+        $content = null;
 
         // If we are on the course module view page.
         if ($PAGE->context && $PAGE->context->contextlevel == CONTEXT_MODULE && $PAGE->cm) {
-            $links = new navigation_links();
+            $content = new format_simple_topics_content_footer();
         }
 
-        return $links;
+        return $content;
     }
 }
 
 /**
- * Class navigation_links is renderable for displaying next-prev links. It's required by format API.
+ * Class format_simple_topics_content_footer is renderable for displaying course footer.
+ * It's required by format API.
  */
-class navigation_links implements renderable {
+class format_simple_topics_content_footer implements renderable {
     protected $currentsection = null;
 
     public function __construct($section = null) {

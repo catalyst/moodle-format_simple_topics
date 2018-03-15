@@ -88,16 +88,20 @@ class format_simple_topics_renderer extends format_topics_renderer {
     }
 
     /**
-     * Render next-prev links.
+     * Render course footer.
      *
-     * @param \navigation_links $links
+     * @param \format_simple_topics_content_footer $content
      *
      * @return string
      */
-    protected function render_navigation_links(navigation_links $links) {
+    protected function render_format_simple_topics_content_footer(format_simple_topics_content_footer $content) {
+        $html = '';
         $linksrenderer = $this->page->get_renderer('format_simple_topics', 'navigation_links_activity');
 
-        return $linksrenderer->render_navigation_links();
+        $html .= \local_activity_progress\html_helper::emoticon();
+        $html .= $linksrenderer->render_navigation_links();
+
+        return $html;
     }
 
 }
