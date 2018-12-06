@@ -32,3 +32,11 @@
 .course-content ul.topics li.section .section_action_menu .menu-action-text {
     white-space: nowrap;
 }
+
+.locked_topic {
+    background-image: url("[[pix:theme|padlock]]");
+    background-size: 30%;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: 10px;
+}

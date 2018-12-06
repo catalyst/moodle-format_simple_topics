@@ -221,6 +221,19 @@ class section_progress {
      * @return bool
      */
     protected function is_activity_valid($activity) {
+
+        // Maybe all this logic should be in the renderer instead? (and cleaned up)
+        $config = get_config('format_simple_topics');
+        if ($config->displayhiddentopics == "1" && $activity->url instanceof \moodle_url) {
+            if ($activity->visible == 0) {
+                if (has_capability('moodle/course:viewhiddensections', \context_system::instance())) {
+                    return true;
+                }
+                return false;
+            }
+            return true;
+        }
+
         if ($activity->uservisible && $activity->url instanceof \moodle_url) {
             return true;
         }
