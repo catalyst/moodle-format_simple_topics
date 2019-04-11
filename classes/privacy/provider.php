@@ -17,13 +17,13 @@
 /**
  * Privacy Subsystem implementation.
  *
- * @package <packagename>
+ * @package format_simple_topics
  * @author  Nathan Nguyen <nathannguyen@catalyst-au.net>
  * @copyright  Catalyst IT
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace packagename\privacy;
+namespace format_simple_topics\privacy;
 
 defined('MOODLE_INTERNAL') || die();
 
