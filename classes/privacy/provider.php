@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,24 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings
+ * Privacy Subsystem implementation.
  *
- * @package    format
- * @subpackage simple_topics
- * @author     Dmitrii Metelkin (dmitriim@catalyst-au.net)
+ * @package <packagename>
+ * @author  Nathan Nguyen <nathannguyen@catalyst-au.net>
  * @copyright  Catalyst IT
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace packagename\privacy;
+
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Simple Topics format';
-$string['sectionname'] = 'Topic';
-$string['hidefromothers'] = 'Hide topic';
-$string['showfromothers'] = 'Show topic';
-$string['prevunit'] = 'Previous Unit:';
-$string['nextunit'] = 'Next Unit:';
-$string['displayhiddentopics'] = 'Hide/display inaccessible topics';
-$string['displayhiddentopicsdesc'] = 'Display inaccessible topics greyed out if the user cannot access them. If disabled, these topics will be hidden from view.';
-// Privacy.
-$string['privacy:metadata'] = 'This plugin does not store personal data.';
+class provider implements \core_privacy\local\metadata\null_provider
+{
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function get_reason(): string
+    {
+        return 'privacy:metadata';
+    }
+}
