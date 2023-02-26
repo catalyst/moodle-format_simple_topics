@@ -42,7 +42,7 @@ class format_simple_topics extends format_topics {
      * @return \course_modinfo|null
      * @throws \moodle_exception
      */
-    protected function get_modinfo() {
+    public function get_modinfo(): course_modinfo {
         if (!isset($this->modinfo)) {
             $this->modinfo = get_fast_modinfo($this->get_course());
         }
