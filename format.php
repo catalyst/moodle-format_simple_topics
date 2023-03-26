@@ -45,10 +45,11 @@ course_create_sections_if_missing($course, 0);
 $renderer = $PAGE->get_renderer('format_simple_topics');
 
 if (!empty($displaysection)) {
-    $renderer->print_single_section_page($course, null, null, null, null, $displaysection);
-} else {
-    $renderer->print_multiple_section_page($course, null, null, null, null);
+    $format->set_section_number($displaysection);
 }
+$outputclass = $format->get_output_classname('content');
+$widget = new $outputclass($format);
+echo $renderer->render($widget);
 
 // Include course format js module
 $PAGE->requires->js('/course/format/topics/format.js');
