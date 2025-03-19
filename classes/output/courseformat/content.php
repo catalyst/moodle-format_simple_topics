@@ -51,4 +51,16 @@ class content extends content_base {
         return 'format_simple_topics/local/content';
     }
 
+    public function export_for_template(\renderer_base $output) {
+        $data = parent::export_for_template($output);
+        $sections = $this->export_sections($output);
+        $initialsection = '';
+        if (!empty($sections)) {
+            $initialsection = array_shift($sections);
+        }
+        $data->initialsection = $initialsection;
+        $data->sections = $sections;
+        return $data;
+    }
+
 }
