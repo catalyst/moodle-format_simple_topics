@@ -36,7 +36,12 @@ $course = course_get_format($course)->get_course();
 
 if (($marker >= 0) && has_capability('moodle/course:setcurrentsection', $context) && confirm_sesskey()) {
     $course->marker = $marker;
-    course_set_marker($course->id, $marker);
+    if ($marker == 0) {
+        \core_courseformat\formatactions::section($course->id)->remove_all_markers();
+    } else {
+        $sectioninfo = get_fast_modinfo($course->id)->get_section_info($marker);
+        \core_courseformat\formatactions::section($course->id)->set_marker($sectioninfo, true);
+    }
 }
 
 // Make sure section 0 is created.
@@ -44,8 +49,8 @@ course_create_sections_if_missing($course, 0);
 
 $renderer = $PAGE->get_renderer('format_simple_topics');
 
-if (!empty($displaysection)) {
-    $format->set_section_number($displaysection);
+if (!is_null($displaysection)) {
+    $format->set_sectionnum($displaysection);
 }
 $outputclass = $format->get_output_classname('content');
 $widget = new $outputclass($format);
