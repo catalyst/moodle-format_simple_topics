@@ -26,8 +26,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2023032700;
-$plugin->requires  = 2017050500;
+$plugin->version   = 2026112700;
+$plugin->requires  = 2026100500;
 $plugin->component = 'format_simple_topics';
 $plugin->dependencies = array(
     'format_topics' => 2017051500,
